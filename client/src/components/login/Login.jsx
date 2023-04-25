@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useFormik } from "formik";
+import { loginSchema } from "../../schemas";
 
 const initialValues = {
   email: "",
@@ -12,10 +13,13 @@ function Login() {
 
   const { values, errors, handleBlur, handleChange, handleSubmit } = useFormik({
     initialValues: initialValues,
+    validationSchema: loginSchema,
     onSubmit: (values) => {
       console.log(values);
     },
   });
+
+  console.log(errors);
 
   return (
     <div>
@@ -41,6 +45,7 @@ function Login() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
+                  <p className="text-red-500 mt-1 text-sm"> {errors.email}</p>
                 </div>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -52,7 +57,7 @@ function Login() {
                       name="password"
                       id="password"
                       placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 passwordInput"
+                      className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 passwordInput`}
                       value={values.password}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -87,6 +92,7 @@ function Login() {
                       )}
                     </div>
                   </div>
+                  <p className="text-red-500 mt-1 text-sm">{errors.password}</p>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-start"></div>
