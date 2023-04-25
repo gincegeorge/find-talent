@@ -2,8 +2,20 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useFormik } from "formik";
 
+const initialValues = {
+  email: "",
+  password: "",
+};
+
 function Login() {
   const [showPass, setShowPass] = useState(false);
+
+  const { values, errors, handleBlur, handleChange, handleSubmit } = useFormik({
+    initialValues: initialValues,
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
 
   return (
     <div>
@@ -14,7 +26,7 @@ function Login() {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Sign in to your account
               </h1>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                     Your email
@@ -25,7 +37,9 @@ function Login() {
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="name@company.com"
-                    required
+                    value={values.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                   />
                 </div>
                 <div>
@@ -38,8 +52,10 @@ function Login() {
                       name="password"
                       id="password"
                       placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      required
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 passwordInput"
+                      value={values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                     />
                     <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 showPass">
                       {showPass ? (
