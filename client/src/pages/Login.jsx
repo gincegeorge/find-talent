@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useFormik } from "formik";
-import { loginSchema } from "../../schemas";
+import { loginSchema } from "../schemas";
 
 const initialValues = {
   email: "",

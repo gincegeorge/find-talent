@@ -4,9 +4,10 @@ import Footer from "./components/footer/Footer.jsx";
 
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Error from "./components/Error.jsx";
-import Signup from "./components/signup/Signup.jsx";
-import Home from "./components/homepage/Home.jsx";
-import Login from "./components/login/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import Home from "./pages/Home.jsx";
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/user/dashboard";
 
 function App() {
   //app layout
@@ -35,6 +36,10 @@ function App() {
         {
           path: "/login",
           element: <Login />,
+        },
+        {
+          path: "/dashboard",
+          element: <Dashboard />,
         },
       ],
     },

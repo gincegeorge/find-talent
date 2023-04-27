@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { signUpSchema } from "../../schemas";
+import { signUpSchema } from "../schemas";
 import { useState } from "react";
+import axios from "axios";
 
 const initialValues = {
   name: "",
@@ -17,9 +18,29 @@ function Signup() {
     useFormik({
       initialValues,
       validationSchema: signUpSchema,
-      onSubmit: (values, action) => {
+      onSubmit: async (values, action) => {
         console.log(values);
-        action.resetForm();
+
+        try {
+          const { data } = await axios.post(
+            import.meta.env.VITE_BACKEND_URL + "signup",
+            {
+              ...values,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+          console.log(data);
+
+          if (data?.errors) {
+            console.log("Errorrr found", data.errors);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+
+        // action.resetForm();
       },
     });
 
