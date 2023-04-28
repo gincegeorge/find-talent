@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { loginSchema } from "../schemas";
+import axios from "axios";
 
 const initialValues = {
   email: "",
@@ -15,9 +16,31 @@ function Login() {
     useFormik({
       initialValues,
       validationSchema: loginSchema,
-      onSubmit: (values, action) => {
+      onSubmit:async (values, action) => {
         console.log(values);
-        action.resetForm();
+
+        try {
+          const { data } = await axios.post(
+            import.meta.env.VITE_BACKEND_URL + "login",
+            {
+              ...values,
+            },
+            {
+              withCredentials: true,
+            }
+          );
+
+          console.log(data);
+
+          // if (data?.created) {
+          //   if (data?.token) {
+          //     cookies.set("jwt-user", data.token, { path: "/" });
+          //   }
+          //   Navigate("/dashboard");
+          // }
+        } catch (err) {
+          console.log(err.response.data);
+        }
       },
     });
 

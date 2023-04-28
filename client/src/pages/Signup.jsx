@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { signUpSchema } from "../schemas";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Cookies from "universal-cookie";
 
 const initialValues = {
   name: "",
@@ -13,14 +15,21 @@ const initialValues = {
 
 function Signup() {
   const [showPass, setShowPass] = useState(false);
+  const Navigate = useNavigate();
+  const cookies = new Cookies();
+
+  //check if logged in
+  // useEffect(() => {
+  //   if (cookies.get("jwt-user")) {
+  //     Navigate("/dashboard");
+  //   }
+  // }, []);
 
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues,
       validationSchema: signUpSchema,
       onSubmit: async (values, action) => {
-        console.log(values);
-
         try {
           const { data } = await axios.post(
             import.meta.env.VITE_BACKEND_URL + "signup",
@@ -31,16 +40,19 @@ function Signup() {
               withCredentials: true,
             }
           );
+
           console.log(data);
 
-          if (data?.errors) {
-            console.log("Errorrr found", data.errors);
+          if (data?.created) {
+            if (data?.token) {
+              cookies.set("jwt-user", data.token, { path: "/" });
+            }
+            Navigate("/dashboard");
           }
         } catch (err) {
-          console.log(err);
+          console.log(err.response.data);
         }
-
-        // action.resetForm();
+        action.resetForm();
       },
     });
 

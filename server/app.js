@@ -5,16 +5,17 @@ const userRoutes = require('./routes/user')
 require('dotenv').config()
 require('./config/database').connect()
 const { BACKEND_PORT, FRONTEND_URL } = process.env
+const { debug } = require('./utils/debug')
 
-const app = express() 
-app.use(morgan('dev')) 
+const app = express()
+app.use(morgan('dev'))
 
 //server setup
 app.listen(BACKEND_PORT, () => {
-    console.log("server started on port", BACKEND_PORT);
+    debug("server started on port", BACKEND_PORT)
 })
 
-//cors
+//cors 
 app.use(cors({
     origin: [FRONTEND_URL],
     methods: ["GET", "POST"],
