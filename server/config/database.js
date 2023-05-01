@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 require('dotenv').config()
 const { MONGO_URI } = process.env
-const { dbDebug } = require('../utils/debug')
+const { debug } = require('../utils/debug')
 
 exports.connect = () => {
     mongoose
@@ -10,10 +10,10 @@ exports.connect = () => {
             useUnifiedTopology: true
         })
         .then(() => {
-            dbDebug('Successfully connected to database')
+            debug('Successfully connected to database')
         })
         .catch((err) => {
-            dbDebug('database connection failed. exiting now...')
+            debug('database connection failed. exiting now...')
             console.error(err);
             // process.exit(1);
         })

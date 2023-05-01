@@ -1,5 +1,9 @@
-const handleErrors = (err) => {
-    let errors = { email: "", password: "" }
+const { log } = require("../../utils/debug");
+
+const generateError = (err) => {
+    let error = { email: "", phone: "", password: "" }
+
+    log(err.message)
 
     if (err.code === 11000) {
 
@@ -8,13 +12,17 @@ const handleErrors = (err) => {
         console.log(keys);
 
         if (keys.includes('email')) {
-            errors.email = "This email is already registered."
+            error.email = "This email is already registered."
         } else if (keys.includes('phone')) {
-            errors.phone = 'This phone number is already registered.'
+            error.phone = 'This phone number is already registered.'
         }
-
-        return errors
     }
+
+    if (err.message.includes("Invalid password")) {
+        error.password = "Invalid password"
+    }
+
+    return error
 }
 
-module.exports = handleErrors
+module.exports = generateError

@@ -41,18 +41,19 @@ function Signup() {
             }
           );
 
-          console.log(data);
-
-          if (data?.created) {
+          if (data.created === true) {
             if (data?.token) {
               cookies.set("jwt-user", data.token, { path: "/" });
             }
+            action.resetForm();
             Navigate("/dashboard");
           }
         } catch (err) {
+          if (err.response.data.error.email) {
+            errors.email = err.response.data.error.email
+          }
           console.log(err.response.data);
         }
-        action.resetForm();
       },
     });
 

@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { loginSchema } from "../schemas";
+import Cookies from "universal-cookie";
 import axios from "axios";
 
 const initialValues = {
@@ -11,12 +12,14 @@ const initialValues = {
 
 function Login() {
   const [showPass, setShowPass] = useState(false);
+  const cookies = new Cookies();
+  const Navigate = useNavigate();
 
   const { values, errors, handleBlur, touched, handleChange, handleSubmit } =
     useFormik({
       initialValues,
       validationSchema: loginSchema,
-      onSubmit:async (values, action) => {
+      onSubmit: async (values, action) => {
         console.log(values);
 
         try {
@@ -30,16 +33,20 @@ function Login() {
             }
           );
 
-          console.log(data);
-
-          // if (data?.created) {
-          //   if (data?.token) {
-          //     cookies.set("jwt-user", data.token, { path: "/" });
-          //   }
-          //   Navigate("/dashboard");
-          // }
+          if (data.created) {
+            if (data.token) {
+              cookies.set("jwt-user", data.token, { path: "/" });
+              action.resetForm();
+              Navigate("/dashboard");
+            }
+          }
         } catch (err) {
-          console.log(err.response.data);
+          const error = err.response.data.error;
+          if (error.email) {
+            errors.email = error.email;
+          } else if (error.password) {
+            errors.password = error.password;
+          }
         }
       },
     });
