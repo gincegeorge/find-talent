@@ -1,7 +1,8 @@
 const express = require("express")
 const cors = require('cors')
 const morgan = require('morgan')
-const userRoutes = require('./routes/user')
+const userRoutes = require('./routes/userRoutes')
+const businessRoutes = require('./routes/businessRoutes')
 require('dotenv').config()
 require('./config/database').connect()
 const { BACKEND_PORT, FRONTEND_URL } = process.env
@@ -24,4 +25,10 @@ app.use(cors({
 
 app.use(express.json())
 
-app.use('/', userRoutes)
+
+app.get('/', (req, res) => {
+    adminDebug("foooooooooooooooooooooooooooooooooooooooooooooooo")
+    res.send("working")
+})
+app.use('/user/', userRoutes)
+app.use('/business/', businessRoutes)

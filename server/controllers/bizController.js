@@ -1,40 +1,35 @@
-const User = require('../models/userSchema')
-const generateError = require('./helpers/generateError');
-const { log } = require('../utils/debug');
-const { comparePassword, createToken, hash, verifyJWT } = require('./helpers/authHelpers');
+const bizSchema = require("../models/bizSchema")
+const { log } = require("../utils/debug")
+const { hashPassword, createToken, comparePassword } = require("./helpers/authHelpers")
+const generateError = require("./helpers/generateError")
 
-const signUp = async (req, res) => {
+
+
+
+const bizSignup = async (req, res) => {
     try {
-
         let { name, email, password } = req.body
 
         password = await hashPassword(password)
-
         log(password)
 
-        const user = await User.create({ name, email, password })
+        const bizUser = await bizSchema.create({ name, email, password })
 
-        const token = await createToken(user._id)
+        const token = await createToken(bizUser._id)
 
-        log(user)
-
-        res.status(201).json({ created: true, user, token })
+        res.status(201).json({ created: true, bizUser, token })
 
     } catch (err) {
-
         const error = generateError(err)
-
         log(error)
-
         res.status(409).json({ created: false, error })
     }
 }
 
-const login = async (req, res) => {
-
+const bizLogin = async (req, res) => {
     const { email, password } = req.body
 
-    const userData = await User.findOne({ email: email })
+    const userData = await bizSchema.findOne({ email: email })
 
     if (userData) {
         try {
@@ -59,12 +54,8 @@ const login = async (req, res) => {
 }
 
 
-const verifyUser = async (req, res) => {
-    const data = {
-        isVerified: true
-    }
-    data.isVerified = await verifyJWT(req.body.cookie)
-    res.status(200).send(data)
-}
 
-module.exports = { signUp, login, verifyUser }
+module.exports = {
+    bizSignup,
+    bizLogin,
+} 
